@@ -1,9 +1,8 @@
 import Vue from 'vue'
-import App from './App.vue'
 import Index from './index'
-import Sort from './sort'
-import Index2 from './detail'
+import Index2 from './index2'
 import VueRouter from 'vue-router'
+
 // 导入element-ui
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'

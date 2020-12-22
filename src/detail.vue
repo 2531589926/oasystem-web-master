@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <!--顶部-->
-    <div style="height: 115px">
+    <!--<div style="height: 115px">
       <div class="head">
         <div class="container">
           <div class="s-sub">
@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <!--顶部logo/搜索框-->
+      &lt;!&ndash;顶部logo/搜索框&ndash;&gt;
       <div class="box-top">
         <div class="container">
           <div class="row">
@@ -31,7 +31,7 @@
         </div>
 
       </div>
-    </div>
+    </div>-->
     <!--主体-->
     <div id="box">
       <div class="container">
@@ -120,7 +120,7 @@
       </div>
     </div>
     <!--底部-->
-    <div class="foot">
+    <!--<div class="foot">
       <div style="width: 1170px;margin: auto">
         <div style="width: 100%;float: left" id="bottom_box_top">
           <div style="width: 16.66%;float: left">
@@ -241,7 +241,7 @@
             湘公网安备 44010602000444号</a>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -308,7 +308,7 @@
 </script>
 
 <style scoped>
-  .detail {
+  /*.detail {
     position: absolute;
     top: 0;
     left: 0;
@@ -316,7 +316,7 @@
     height: 100%;
   }
 
-  /*顶部样式*/
+  !*顶部样式*!
   .head {
     width: 100%;
     height: 36px;
@@ -429,7 +429,7 @@
   }
 
 
-  /*底部样式*/
+  !*底部样式*!
   .foot {
     width: 100%;
     height: 600px;
@@ -536,7 +536,7 @@
     font-size: 12px;
     color: dodgerblue;
     text-decoration: none;
-  }
+  }*/
 
   .goods_img_box {
     width: 40%;
