@@ -38,27 +38,12 @@
         <!--左侧图片-->
         <div class="goods_img_box">
           <div class="goods_img_max"
-               style="background-image: url('src/img/手机/vivo/vivoNEX3/10001477_1568011033880_750x750.png.webp')">
+               :style="imageData[0].img">
           </div>
 
-          <div class="goods_img_min_box">
-            <div class="goods_img_min" @mouseover="imageShow(1)"
-                 style="background-image: url('src/img/手机/vivo/vivoNEX3/10001477_1568011033880_750x750.png.webp');">
-            </div>
-          </div>
-          <div class="goods_img_min_box">
-            <div class="goods_img_min" @mouseover="imageShow(2)"
-                 style="background-image: url('src/img/手机/vivo/vivoNEX3/10001477_1568011033806_750x750.png.webp');">
-            </div>
-          </div>
-          <div class="goods_img_min_box">
-            <div class="goods_img_min" @mouseover="imageShow(3)"
-                 style="background-image: url('src/img/手机/vivo/vivoNEX3/10001477_1568011033923_750x750.png.webp');">
-            </div>
-          </div>
-          <div class="goods_img_min_box">
-            <div class="goods_img_min" @mouseover="imageShow(4)"
-                 style="background-image: url('src/img/手机/vivo/vivoNEX3/10001477_1568011033971_750x750.png.webp');">
+          <div class="goods_img_min_box" v-for="item in imageData">
+            <div class="goods_img_min" @mouseover="imageShow(item.img)"
+                 :style="item.img">
             </div>
           </div>
         </div>
@@ -66,12 +51,12 @@
         <div class="goods_message_box">
           <!--名称和备注-->
           <div class="goods_name_box">
-            <span class="goods_name">vivo NEX 3</span>
-            <span class="goods_remark">双模5G全网通，高通骁龙865，无界瀑布屏，隐藏压感键，64M高清三摄</span>
+            <span class="goods_name">{{commodityData.name}}</span>
+            <span class="goods_remark">{{commodityData.remark}}</span>
           </div>
           <!--价格-->
           <div class="goods_price_box">
-            <span class="goods_price">￥<span>4998.00</span></span>
+            <span class="goods_price">￥<span>{{price}}</span></span>
             <span class="jiFen_title">积分</span>
             <span class="jiFen_span">购物送积分</span>
           </div>
@@ -79,14 +64,8 @@
           <div class="goods_color_box">
             <span class="color_title">颜色</span>
             <div class="color_boxs">
-              <div class="color_div">
-                <span class="color_box" @click="colorChange($event)">黑色</span>
-              </div>
-              <div class="color_div">
-                <span class="color_box" @click="colorChange($event)">白色</span>
-              </div>
-              <div class="color_div">
-                <span class="color_box" @click="colorChange($event)">蓝色</span>
+              <div class="color_div" v-for="item in colorData">
+                <span class="color_box" @click="colorChange($event,item.id)">{{item.color}}</span>
               </div>
             </div>
           </div>
@@ -94,11 +73,8 @@
           <div class="goods_version_box">
             <span class="version_title">版本</span>
             <div class="version_boxs">
-              <div class="version_div">
-                <span class="version_box" @click="versionChange($event)">8G+128G</span>
-              </div>
-              <div class="version_div">
-                <span class="version_box" @click="versionChange($event)">8G+256G</span>
+              <div class="version_div" v-for="item in versionData">
+                <span class="version_box" @click="versionChange($event,item.id,item.price)">{{item.version}}</span>
               </div>
             </div>
           </div>
@@ -113,7 +89,7 @@
           </div>
           <!--按钮操作-->
           <div class="goods_btn_box">
-            <button class="goods_btn" id="add_car">加入购物车</button>
+            <button class="goods_btn" @click="addCar" id="add_car">加入购物车</button>
             <button class="goods_btn" id="pay_btn">立即购买</button>
           </div>
         </div>
@@ -252,42 +228,121 @@
     name: "detail",
     data() {
       return {
-        image: {
-          img1: "src/img/手机/vivo/vivoNEX3/10001477_1568011033880_750x750.png.webp",
-          img2: "src/img/手机/vivo/vivoNEX3/10001477_1568011033806_750x750.png.webp",
-          img3: "src/img/手机/vivo/vivoNEX3/10001477_1568011033923_750x750.png.webp",
-          img4: "src/img/手机/vivo/vivoNEX3/10001477_1568011033971_750x750.png.webp"
-        },
+        commodityData: {},
+        imageData: [],
+        colorData: [],
+        versionData: [],
+        commodity_id:1,
+        numbers: 1,
+        colorId: 0,
+        versionId: 0,
+        price: 0,
       }
     },
+    created() {
+      this.getDate();
+    },
     methods: {
-      /*图片显示*/
-      imageShow: function (data) {
+      getDate() {
         var _this = this;
-        if (data == 1) {
-          $(".goods_img_max").css("background-image", "url('" + _this.image.img1 + "')")
-        } else if (data == 2) {
-          $(".goods_img_max").css("background-image", "url('" + _this.image.img2 + "')")
-        } else if (data == 3) {
-          $(".goods_img_max").css("background-image", "url('" + _this.image.img3 + "')")
-        } else {
-          $(".goods_img_max").css("background-image", "url('" + _this.image.img4 + "')")
-        }
+        //商品查询
+        var params = new URLSearchParams();
+        params.append('id', '1');
+        this.$axios.post("commodity/queryById.action", params).then(function (result) {  //成功  执行then里面的方法
+
+          var data = result.data;
+
+          _this.commodityData = data;
+
+          _this.colorQuery(data.id);
+
+          _this.versionQuery(data.id);
+
+          _this.imgQuery(data.id);
+        }).catch(function () { //失败 执行catch方法
+
+        });
+      },
+      /*颜色查询*/
+      colorQuery: function (id) {
+        var _this = this;
+
+        //颜色查询
+        var params = new URLSearchParams();
+        params.append('commodity_id', id);
+
+        this.$axios.post("colorInfo/queryAll.action", params).then(function (result) {  //成功  执行then里面的方法
+          _this.colorData = result.data;
+        }).catch(function () { //失败 执行catch方法
+
+        });
+      },
+      /*版本查询*/
+      versionQuery: function (id) {
+        var _this = this;
+
+        var params = new URLSearchParams();
+        params.append('commodity_id', id);
+
+        this.$axios.post("versionInfo/queryAll.action", params).then(function (result) {  //成功  执行then里面的方法
+          _this.versionData = result.data;
+          _this.price = result.data[0].price;
+        }).catch(function () { //失败 执行catch方法
+
+        });
+      },
+      /*图片查询*/
+      imgQuery: function (id) {
+        var _this = this;
+
+        var params = new URLSearchParams();
+        params.append('commodity_id', id);
+
+        this.$axios.post("imgInfo/queryAll.action", params).then(function (result) {  //成功  执行then里面的方法
+
+          var data = result.data;
+
+          for (var item of data) {
+            item.img = "background-image: url('src/img/telePhone/" + item.img + "')";
+          }
+
+          _this.imageData = data;
+
+        }).catch(function () { //失败 执行catch方法
+
+        });
+      },
+      /*图片显示*/
+      imageShow: function (img) {
+        var image = img.slice(23);
+        let index = image.lastIndexOf("'")
+        image = image.substring(0, index);
+
+        $(".goods_img_max").css("background-image", "url('" + image + "')")
       },
       /*数量减*/
       btn_jian: function () {
-        var price = parseInt($(".goods_num").val());
-        if (price != 1) {
-          $(".goods_num").val(price - 1);
+        var _this=this;
+        var number = parseInt($(".goods_num").val());
+        if (number != 1) {
+          number=number-1;
+          $(".goods_num").val(number);
         }
+        _this.numbers=number;
       },
       /*数量加*/
       btn_jia: function () {
-        var price2 = parseInt($(".goods_num").val());
-        $(".goods_num").val(price2 + 1);
+        var _this=this;
+        var number = parseInt($(".goods_num").val());
+        number=number+1;
+        $(".goods_num").val(number);
+        _this.numbers=number;
       },
       /*选择颜色*/
-      colorChange: function (event) {
+      colorChange: function (event, id) {
+        var _this = this;
+        _this.colorId = id;
+
         $(".color_box").css("border", "");
         $(".color_box").css("color", "");
         var el = event.currentTarget;
@@ -295,7 +350,11 @@
         $(el).css("color", "red");
       },
       /*选择版本*/
-      versionChange: function (event) {
+      versionChange: function (event, id, price) {
+        var _this = this;
+        _this.versionId = id;
+        _this.price = price;
+
         $(".version_box").css("border", "");
         $(".version_box").css("color", "");
 
@@ -303,6 +362,34 @@
         $(el).css("border", "red solid 1px");
         $(el).css("color", "red");
       },
+      /*加入购物车*/
+      addCar:function () {
+        var _this=this;
+        var image = _this.imageData[0].img.slice(41);
+        let index = image.lastIndexOf("'")
+        image = image.substring(0, index);
+
+        if (_this.colorId==0){
+          alert("请选择颜色")
+        }else if (_this.versionId==0){
+          alert("请选择版本")
+        }else {
+          var params = new URLSearchParams();
+
+          params.append('user_id', "1");
+          params.append('commodity_id', _this.commodity_id);
+          params.append('color_id', _this.colorId);
+          params.append('version_id', _this.versionId);
+          params.append('commodity_img', image);
+          params.append('number', _this.numbers);
+
+          this.$axios.post("shoppingCar/insert.action", params).then(function (result) {  //成功  执行then里面的方法
+            alert(result.data);
+          }).catch(function () { //失败 执行catch方法
+
+          });
+        }
+      }
     },
   }
 </script>
@@ -542,6 +629,7 @@
     width: 40%;
     height: auto;
     float: left;
+    margin-top: 35px;
   }
 
   .goods_message_box {

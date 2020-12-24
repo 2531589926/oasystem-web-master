@@ -41,30 +41,9 @@
             分类：
           </div>
           <div class="type_box_texts">
-            <div class="type_box_text">
-              <input class="type_box_check" type="checkbox" name="type_check"/>
-              <span class="type_box_span">手机</span>
-            </div>
-            <div class="type_box_text">
-              <input class="type_box_check" type="checkbox" name="type_check"/>
-              <span class="type_box_span">笔记本</span>
-            </div>
-            <div class="type_box_text">
-              <input class="type_box_check" type="checkbox" name="type_check"/>
-              <span class="type_box_span">智能家居</span>
-            </div>
-            <div class="type_box_text">
-              <input class="type_box_check" type="checkbox" name="type_check"/>
-              <span class="type_box_span">智能佩戴</span>
-            </div>
-            <div class="type_box_text">
-              <input class="type_box_check" type="checkbox" name="type_check"/>
-              <span class="type_box_span">耳机音响</span>
-            </div>
-            <div class="type_box_text">
-              <input class="type_box_check" type="checkbox" name="type_check"/>
-              <span class="type_box_span">配件</span>
-            </div>
+            <el-radio-group class="type_box_text" v-model="typeCheck" v-for="item in commodityTypeData">
+              <el-radio @change="typeQuery(item.id)" :label="item.id">{{item.name}}</el-radio>
+            </el-radio-group>
           </div>
           <div class="zhanKai_box">
                 <span class="zhanKai_text" @click="typeZhanKai">
@@ -76,33 +55,12 @@
         <!--品牌-->
         <div class="brand-box">
           <div class="brand-box_title">
-            品牌：
+            品牌/种类：
           </div>
           <div class="brand-box_texts">
-            <div class="brand-box_text">
-              <input class="brand-box_check" type="checkbox" name="brand-check"/>
-              <span class="brand-box_span">华为</span>
-            </div>
-            <div class="brand-box_text">
-              <input class="brand-box_check" type="checkbox" name="brand-check"/>
-              <span class="brand-box_span">苹果</span>
-            </div>
-            <div class="brand-box_text">
-              <input class="brand-box_check" type="checkbox" name="brand-check"/>
-              <span class="brand-box_span">魅族</span>
-            </div>
-            <div class="brand-box_text">
-              <input class="brand-box_check" type="checkbox" name="brand-check"/>
-              <span class="brand-box_span">vivo</span>
-            </div>
-            <div class="brand-box_text">
-              <input class="brand-box_check" type="checkbox" name="brand-check"/>
-              <span class="brand-box_span">oppo</span>
-            </div>
-            <div class="brand-box_text">
-              <input class="brand-box_check" type="checkbox" name="brand-check"/>
-              <span class="brand-box_span">小米</span>
-            </div>
+              <el-radio-group class="type_box_text" v-model="brandCheck" v-for="item in brandData">
+                <el-radio @change="brandQuery(item.id)" :label="item.id">{{item.name}}</el-radio>
+              </el-radio-group>
           </div>
           <div class="zhanKai_box">
                 <span class="zhanKai_text" @click="brandZhanKai">
@@ -113,155 +71,19 @@
         </div>
         <!--商品展示-->
         <div class="goods-box">
-          <div class="good-boxs">
-            <div class="good-box">
-              <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
-              </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
-              <div class="goods_price">
-                ￥<span>5699</span>
-              </div>
-              <div class="goods_sale_num">
-                        <span style="display: inline-block;width: 100%">
-                            <span class="goods_sale_show_btn">多款可选</span>
-                        </span>
-                <span style="display: inline-block;width: 100%;text-align: right">
-                            月销:<span>45678</span>
-                        </span>
-              </div>
-            </div>
+          <div v-if="commodityData.length==0" class="row" style="text-align: center;height: 100px;color: rgb(80,80,80);line-height: 80px">
+            暂未找到您要查找的商品，正在努力为您备货中...
+            <img title="跑得太慢？点击加速" src="src/img/26097-202004300637175eaa721d7566a.gif" @click="imgpaoBu($event)" style="width: 100px;height: 100px;cursor: pointer"/>
           </div>
-          <div class="good-boxs">
+          <div class="good-boxs" @click="selectCommodity(item.id)" v-for="item in commodityData" v-if="commodityData.length!=0">
             <div class="good-box">
               <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
+                <img :src="item.img" class="goods_img"/>
               </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
+              <span class="goods_name">{{item.name}}</span>
+              <span class="goods_remark">{{item.remark}}</span>
               <div class="goods_price">
-                ￥<span>5699</span>
-              </div>
-              <div class="goods_sale_num">
-                        <span style="display: inline-block;width: 100%">
-                            <span class="goods_sale_show_btn">多款可选</span>
-                        </span>
-                <span style="display: inline-block;width: 100%;text-align: right">
-                            月销:<span>45678</span>
-                        </span>
-              </div>
-            </div>
-          </div>
-          <div class="good-boxs">
-            <div class="good-box">
-              <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
-              </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
-              <div class="goods_price">
-                ￥<span>5699</span>
-              </div>
-              <div class="goods_sale_num">
-                        <span style="display: inline-block;width: 100%">
-                            <span class="goods_sale_show_btn">多款可选</span>
-                        </span>
-                <span style="display: inline-block;width: 100%;text-align: right">
-                            月销:<span>45678</span>
-                        </span>
-              </div>
-            </div>
-          </div>
-          <div class="good-boxs">
-            <div class="good-box">
-              <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
-              </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
-              <div class="goods_price">
-                ￥<span>5699</span>
-              </div>
-              <div class="goods_sale_num">
-                        <span style="display: inline-block;width: 100%">
-                            <span class="goods_sale_show_btn">多款可选</span>
-                        </span>
-                <span style="display: inline-block;width: 100%;text-align: right">
-                            月销:<span>45678</span>
-                        </span>
-              </div>
-            </div>
-          </div>
-          <div class="good-boxs">
-            <div class="good-box">
-              <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
-              </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
-              <div class="goods_price">
-                ￥<span>5699</span>
-              </div>
-              <div class="goods_sale_num">
-                        <span style="display: inline-block;width: 100%">
-                            <span class="goods_sale_show_btn">多款可选</span>
-                        </span>
-                <span style="display: inline-block;width: 100%;text-align: right">
-                            月销:<span>45678</span>
-                        </span>
-              </div>
-            </div>
-          </div>
-          <div class="good-boxs">
-            <div class="good-box">
-              <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
-              </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
-              <div class="goods_price">
-                ￥<span>5699</span>
-              </div>
-              <div class="goods_sale_num">
-                        <span style="display: inline-block;width: 100%">
-                            <span class="goods_sale_show_btn">多款可选</span>
-                        </span>
-                <span style="display: inline-block;width: 100%;text-align: right">
-                            月销:<span>45678</span>
-                        </span>
-              </div>
-            </div>
-          </div>
-          <div class="good-boxs">
-            <div class="good-box">
-              <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
-              </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
-              <div class="goods_price">
-                ￥<span>5699</span>
-              </div>
-              <div class="goods_sale_num">
-                        <span style="display: inline-block;width: 100%">
-                            <span class="goods_sale_show_btn">多款可选</span>
-                        </span>
-                <span style="display: inline-block;width: 100%;text-align: right">
-                            月销:<span>45678</span>
-                        </span>
-              </div>
-            </div>
-          </div>
-          <div class="good-boxs">
-            <div class="good-box">
-              <div class="goods_img_box">
-                <img src="src/img/phone/HUAWEI%20p40%20Pro%205G.png" class="goods_img"/>
-              </div>
-              <span class="goods_name">HUAWEI p40 Pro</span>
-              <span class="goods_remark">麒麟990 5G SoC芯片 5000万超感知徕卡四摄 50倍数字变焦 全网通5G手机</span>
-              <div class="goods_price">
-                ￥<span>5699</span>
+                ￥<span>{{item.minPrice}}</span>
               </div>
               <div class="goods_sale_num">
                         <span style="display: inline-block;width: 100%">
@@ -407,7 +229,84 @@
 
   export default {
     name: "sort",
+    data() {
+      return {
+        commodityData: [],
+        brandData: [],
+        commodityTypeData: [],
+        price:'',
+        typeId:"",
+        brandId:"",
+        typeCheck:0,
+        brandCheck:0,
+      }
+    },
+    created() {
+      this.getDate();
+    },
     methods: {
+      /*获取数据*/
+      getDate(tid,bid) {
+        var _this = this;
+
+        //商品查询
+        var params = new URLSearchParams();
+        if (tid!=null&&tid!=""){
+          _this.typeId=tid;
+        }
+        if (bid!=null&&bid!=""){
+          _this.brandId=bid;
+        }
+
+        if (_this.typeId!=null&&_this.typeId!=""){
+          params.append('commodityType_id',_this.typeId);
+        }
+        if (_this.brandId!=null&&_this.brandId!=""){
+          params.append('brand_id',_this.brandId);
+        }
+
+
+        this.$axios.post("commodity/queryAll.action",params).then(function (result) {  //成功  执行then里面的方法
+          var data = result.data;
+
+          for (var item of data) {
+            item.img = "src/img/telePhone/" + item.img;
+          }
+
+          _this.commodityData = data;
+        }).catch(function () { //失败 执行catch方法
+
+        });
+        //品牌查询
+        this.$axios.post("brand/queryAll.action").then(function (result) {  //成功  执行then里面的方法
+          _this.brandData = result.data;
+        }).catch(function () { //失败 执行catch方法
+
+        });
+        //类型查询
+        this.$axios.post("commodityType/queryAll.action").then(function (result) {  //成功  执行then里面的方法
+          _this.commodityTypeData = result.data;
+        }).catch(function () { //失败 执行catch方法
+
+        });
+      },
+
+      /*类型条件查询*/
+      typeQuery:function(id){
+        var _this =this;
+
+        _this.getDate(id,null);
+      },
+      /*品牌条件查询*/
+      brandQuery:function(id){
+        var _this =this;
+
+        _this.getDate(null,id);
+      },
+      /*选择商品*/
+      selectCommodity:function(id){
+        alert(id)
+      },
       /*分类展开*/
       typeZhanKai: function () {
         var a = $(".type_box_texts").css("height");
@@ -435,6 +334,11 @@
         }
 
       },
+
+      imgpaoBu:function (event) {
+        var el = event.currentTarget;
+        $(el).attr("src","src/img/26097-202004300637175eaa721d8b315.gif");
+      }
     }
   }
 </script>
@@ -689,6 +593,7 @@
     line-height: 50px;
     padding-left: 40px;
     float: left;
+    cursor: pointer;
   }
 
   .type_box_texts {
@@ -703,6 +608,7 @@
     width: 152px;
     height: 50px;
     float: left;
+    line-height: 60px;
   }
 
   .type_box_span {
@@ -742,6 +648,7 @@
     line-height: 50px;
     padding-left: 40px;
     float: left;
+    cursor: pointer;
   }
 
   .brand-box_texts {
@@ -786,6 +693,7 @@
     background-color: white;
     border-radius: 10px;
     cursor: pointer;
+    transition: .3s;
   }
 
   .good-box:hover {
